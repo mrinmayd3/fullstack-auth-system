@@ -49,7 +49,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex justify-center align-middle">
+    <div className="flex justify-center align-middle mt-10">
       <form onSubmit={submitHandler}>
         <h1 className="text-center text-4xl font-bold mt-3">sign up</h1>
 
@@ -58,7 +58,7 @@ export default function SignUp() {
             Username
           </label>
           <input
-            className="p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
+            className="w-full p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
             type="text"
             name="username"
             id="username"
@@ -74,7 +74,7 @@ export default function SignUp() {
             Email
           </label>
           <input
-            className="p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
+            className="w-full p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
             type="email"
             name="email"
             id="email"
@@ -90,7 +90,7 @@ export default function SignUp() {
             Password
           </label>
           <input
-            className="p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
+            className="w-full p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
             type="password"
             name="password"
             id="password"
@@ -102,13 +102,13 @@ export default function SignUp() {
         </div>
 
         <button
-          className="p-2 rounded-lg bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300"
+          className="w-full p-2 rounded-lg bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300"
           disabled={isLoading}
         >
           {isLoading ? "creating user .." : "Sign up"}
         </button>
 
-        <div className="block mt-2 border-b-2">
+        <div className="block mt-4 border-b-2">
           <Link href={"/login"}>Have an account go to log in page</Link>
         </div>
       </form>

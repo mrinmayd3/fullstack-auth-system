@@ -50,7 +50,7 @@ export default function LogIn() {
   };
 
   return (
-    <div className="flex justify-center align-middle">
+    <div className="flex justify-center align-middle mt-10 p-4">
       <form onSubmit={submitHandler}>
         <h1 className="text-center text-4xl font-bold mt-3">Log in</h1>
 
@@ -59,7 +59,7 @@ export default function LogIn() {
             Email
           </label>
           <input
-            className="p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
+            className="w-full p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
             type="email"
             name="email"
             id="email"
@@ -75,7 +75,7 @@ export default function LogIn() {
             Password
           </label>
           <input
-            className="p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
+            className="w-full p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
             type="password"
             name="password"
             id="password"
@@ -87,13 +87,19 @@ export default function LogIn() {
         </div>
 
         <button
-          className="p-2 rounded-lg bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300"
+          className="w-full p-2 rounded-lg bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300"
           disabled={isLoading}
         >
           {isLoading ? "logging in .." : "Log in"}
         </button>
 
-        <div className="block mt-2 border-b-2">
+        <div className="mt-3">
+          <Link href={"/forgot-password"} className="hover:border-b-2 ">
+            Forgot password?
+          </Link>
+        </div>
+
+        <div className="block mt-10 border-b-2">
           <Link href={"/signup"}>Don't have an account go to sign up page</Link>
         </div>
       </form>

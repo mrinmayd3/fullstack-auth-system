@@ -39,19 +39,21 @@ const ForgotPassword = () => {
   //   console.log(isLoading, isSubmitted, isSubmitting);
 
   return (
-    <div className="flex justify-center align-middle">
+    <div className="flex justify-center align-middle mt-10 p-4">
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className="text-center text-4xl font-bold mt-3">
           Forgot your password
         </h1>
-        <p>Enter your existing email and request for a reset password mail</p>
+        <p className="text-center">
+          Enter your existing email and request for a reset password mail
+        </p>
 
         <div className="my-4">
-          <label className="block mb-2" htmlFor="email">
+          <label className="block mb-2 text-xl" htmlFor="email">
             Email
           </label>
           <input
-            className="p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
+            className="w-full p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
             placeholder="Enter your email"
             {...register("email", {
               required: {
@@ -71,7 +73,7 @@ const ForgotPassword = () => {
 
         <button
           disabled={isSubmitting}
-          className="p-2 rounded-lg bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300"
+          className="w-full p-2 rounded-lg bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300"
         >
           {isSubmitting ? "sending.." : "Send"}
         </button>
