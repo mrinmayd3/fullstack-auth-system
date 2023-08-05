@@ -16,7 +16,8 @@ const ForgotPassword = () => {
   const {
     handleSubmit,
     register,
-    formState: { errors, isLoading, isSubmitted, isSubmitting },
+    formState: { errors, isSubmitting },
+    reset,
   } = useForm<FormInputType>();
 
   // submit handler
@@ -27,6 +28,10 @@ const ForgotPassword = () => {
       });
 
       console.log(data);
+      if (data.success) {
+        toast.success(data.message);
+        reset();
+      }
     } catch (error) {
       if (isAxiosError(error)) {
         toast.error(error.response?.data.error);
