@@ -24,7 +24,7 @@ export const sendEmail = async (
     if (emailType === "VERIFY") {
       await User.findByIdAndUpdate(id, {
         verifyToken: hashedToken,
-        verifyTokenExpiry: Date.now() + 10 * (60 * 1000),
+        verifyTokenExpiry: Date.now() + 24 * (60 * 60 * 1000),
       });
 
       const verifyUrl = `${process.env.DOMAIN}/verify-email?token=${hashedToken}`;
@@ -61,12 +61,12 @@ export const sendEmail = async (
         subject: "RESET PASSWORD -- NEXT-AUTH",
         html: `
       <h1>You requested for a reset password</h1>
-      <p>Please click the link below to reset your password</p>
+      <p>Please click the link below to reset your password. The link will expire in 10 minutes</p>
       <a href=${verifyUrl} clicktraking=off>${verifyUrl}</a>
   `,
       });
 
-      console.log(info.messageId);
+      // console.log(info.messageId);
 
       return info;
     }
