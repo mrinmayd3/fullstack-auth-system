@@ -1,37 +1,56 @@
 "use client";
 
-import React, { ChangeEvent, FormEvent } from "react";
+import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import axios, { AxiosError } from "axios";
+import axios, { isAxiosError } from "axios";
 import { toast } from "react-hot-toast";
 
-export default function SignUp() {
-  const [user, setUser] = React.useState({
-    username: "",
-    email: "",
-    password: "",
-  });
-  const [isLoading, setIsLoading] = React.useState(false);
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 
+// types
+type SignUpFormType = {
+  username: string;
+  email: string;
+  password: string;
+};
+
+// email regex
+const emailRegex =
+  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+export default function SignUp() {
   const router = useRouter();
 
-  console.log("sing up page render");
+  // console.log("sing up page render");
 
-  // on change handler
-  const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setUser((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
-  };
+  // form validation schema
+  const userValidationSchema = Yup.object().shape({
+    username: Yup.string().required().min(3).max(20),
+    email: Yup.string()
+      .required()
+      .email()
+      .matches(emailRegex, "email must be a valid email"),
+    password: Yup.string().required().min(6),
+  });
+
+  // react hook form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<SignUpFormType>({
+    resolver: yupResolver(userValidationSchema),
+  });
 
   // submit handler
-  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    // console.log("submitted", user);
+  const submitHandler = async (value: SignUpFormType) => {
+    // console.log("submitted", value);
 
     try {
-      const response = await axios.post("api/users/signup", user);
+      const response = await axios.post("api/users/signup", value);
 
       console.log("successfully created", response.data);
 
@@ -39,18 +58,18 @@ export default function SignUp() {
         // router.push("/login");
         toast.success(response.data.message);
       }
-    } catch (error: any) {
-      console.log(error);
-
-      toast.error(error.response.data.error);
-    } finally {
-      setIsLoading(false);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        toast.error(error.response?.data.error);
+      } else {
+        console.log(error);
+      }
     }
   };
 
   return (
     <div className="flex justify-center align-middle mt-10">
-      <form onSubmit={submitHandler}>
+      <form onSubmit={handleSubmit(submitHandler)} noValidate>
         <h1 className="text-center text-4xl font-bold mt-3">sign up</h1>
 
         <div className="my-4">
@@ -60,13 +79,14 @@ export default function SignUp() {
           <input
             className="w-full p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
             type="text"
-            name="username"
             id="username"
             placeholder="Username"
-            value={user.username}
-            onChange={changeHandler}
-            required
+            {...register("username")}
           />
+
+          <small className="block text-red-500 mt-3">
+            {errors.username?.message}
+          </small>
         </div>
 
         <div className="my-4">
@@ -76,13 +96,14 @@ export default function SignUp() {
           <input
             className="w-full p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
             type="email"
-            name="email"
             id="email"
             placeholder="Email"
-            value={user.email}
-            onChange={changeHandler}
-            required
+            {...register("email")}
           />
+
+          <small className="block text-red-500 mt-3">
+            {errors.email?.message}
+          </small>
         </div>
 
         <div className="my-4">
@@ -92,20 +113,21 @@ export default function SignUp() {
           <input
             className="w-full p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
             type="password"
-            name="password"
             id="password"
             placeholder="Enter your password"
-            value={user.password}
-            onChange={changeHandler}
-            required
+            {...register("password")}
           />
+
+          <small className="block text-red-500 mt-3">
+            {errors.password?.message}
+          </small>
         </div>
 
         <button
           className="w-full p-2 rounded-lg bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300"
-          disabled={isLoading}
+          disabled={isSubmitting}
         >
-          {isLoading ? "creating user .." : "Sign up"}
+          {isSubmitting ? "creating user .." : "Sign up"}
         </button>
 
         <div className="block mt-4 border-b-2">

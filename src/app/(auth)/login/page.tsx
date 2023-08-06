@@ -1,57 +1,73 @@
 "use client";
-import React, { ChangeEvent, FormEvent } from "react";
+import React from "react";
 import Link from "next/link";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+
+type LoginFormType = {
+  email: string;
+  password: string;
+};
+
+// email regex
+const emailRegex =
+  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export default function LogIn() {
-  const [user, setUser] = React.useState({
-    email: "",
-    password: "",
-  });
-  const [isLoading, setIsLoading] = React.useState(false);
-
   // router
   const router = useRouter();
 
-  // change handler
-  const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setUser((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
-  };
+  // validation schema
+  const loginValidationSchema = Yup.object().shape({
+    email: Yup.string()
+      .required()
+      .email()
+      .matches(emailRegex, "email must be a valid email"),
+    password: Yup.string().required(),
+  });
+
+  // react hook form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<LoginFormType>({
+    resolver: yupResolver(loginValidationSchema),
+  });
 
   // submit handler
-  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    console.log(user);
+  const submitHandler = async (value: LoginFormType) => {
+    // console.log(value);
 
     try {
-      const response = await axios.post("/api/users/login", user);
+      const response = await axios.post("/api/users/login", value);
 
-      console.log(response);
+      // console.log(response);
 
       if (response.data.success) {
+        reset();
         router.push("/");
         toast.success(response.data.message);
       }
     } catch (error: unknown) {
-      console.log(error);
-
       if (axios.isAxiosError<{ error: string }>(error)) {
         const displayErr = error.response?.data.error;
 
         toast.error(displayErr!);
+      } else {
+        console.log(error);
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return (
     <div className="flex justify-center align-middle mt-10 p-4">
-      <form onSubmit={submitHandler}>
+      <form onSubmit={handleSubmit(submitHandler)} noValidate>
         <h1 className="text-center text-4xl font-bold mt-3">Log in</h1>
 
         <div className="my-4">
@@ -61,13 +77,14 @@ export default function LogIn() {
           <input
             className="w-full p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
             type="email"
-            name="email"
             id="email"
             placeholder="Email"
-            value={user.email}
-            onChange={changeHandler}
-            required
+            {...register("email")}
           />
+
+          <small className="block text-red-500 mt-3">
+            {errors.email?.message}
+          </small>
         </div>
 
         <div className="my-4">
@@ -77,20 +94,21 @@ export default function LogIn() {
           <input
             className="w-full p-2 rounded-md text-black focus:outline-none focus:ring focus:border-blue-900"
             type="password"
-            name="password"
             id="password"
             placeholder="Enter your password"
-            value={user.password}
-            onChange={changeHandler}
-            required
+            {...register("password")}
           />
+
+          <small className="block text-red-500 mt-3">
+            {errors.password?.message}
+          </small>
         </div>
 
         <button
           className="w-full p-2 rounded-lg bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300"
-          disabled={isLoading}
+          disabled={isSubmitting}
         >
-          {isLoading ? "logging in .." : "Log in"}
+          {isSubmitting ? "logging in .." : "Log in"}
         </button>
 
         <div className="mt-3">
