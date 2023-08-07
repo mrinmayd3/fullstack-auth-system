@@ -21,7 +21,7 @@ const verifyEmail = () => {
     try {
       const { data } = await axios.post("/api/users/verify-email", { token });
 
-      console.log(data);
+      // console.log(data);
       if (data.success) {
         setSuccessMsg(data.message);
       }

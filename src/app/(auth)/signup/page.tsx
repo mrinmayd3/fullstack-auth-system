@@ -41,6 +41,7 @@ export default function SignUp() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<SignUpFormType>({
     resolver: yupResolver(userValidationSchema),
   });
@@ -52,9 +53,10 @@ export default function SignUp() {
     try {
       const response = await axios.post("api/users/signup", value);
 
-      console.log("successfully created", response.data);
+      // console.log("successfully created", response.data);
 
       if (response.data.user) {
+        reset();
         // router.push("/login");
         toast.success(response.data.message);
       }

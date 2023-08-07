@@ -27,7 +27,7 @@ const ForgotPassword = () => {
         email: value.email,
       });
 
-      console.log(data);
+      // console.log(data);
       if (data.success) {
         toast.success(data.message);
         reset();

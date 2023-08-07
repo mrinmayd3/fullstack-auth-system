@@ -11,7 +11,7 @@ DBconnect();
 export async function POST(req: NextRequest) {
   try {
     const reqBody = await req.json();
-    console.log(reqBody);
+    // console.log(reqBody);
     const { username, email, password } = reqBody;
 
     // check the user is exist or not
