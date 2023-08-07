@@ -4,13 +4,11 @@ import axios, { isAxiosError } from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
+import { emailRegex } from "@/lib/validation";
+
 type FormInputType = {
   email: string;
 };
-
-// email regex
-const emailRegex =
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const ForgotPassword = () => {
   const {
