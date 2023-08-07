@@ -66,11 +66,17 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
           {userData && (
             <div>
               <p className="text-2xl font-bold">{userData.username}</p>
-              <p className="text-zinc-400">{userData.email}</p>
-              <p className="text-zinc-400">
-                {" "}
-                {userData.isVerified ? "User verified ✅" : "NOT VERIFIED ❌"}
-              </p>
+              <p className="text-zinc-400 my-1">{userData.email}</p>
+              <div className="text-zinc-400">
+                {userData.isVerified ? (
+                  <p>User verified ✅</p>
+                ) : (
+                  <>
+                    <p>NOT VERIFIED ❌</p>
+                    <small>Status: pending (check you email)</small>
+                  </>
+                )}
+              </div>
             </div>
           )}
         </div>
