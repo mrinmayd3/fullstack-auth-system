@@ -41,7 +41,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
 
   const logoutHandler = async () => {
     try {
-      const response = await axios.get("/api/users/logout");
+      const response = await axios.post("/api/users/logout");
       // console.log(response);
 
       if (response.data.success) {
