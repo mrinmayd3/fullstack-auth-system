@@ -63,7 +63,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
             <UserIcon />
           </div>
 
-          {userData && (
+          {userData ? (
             <div>
               <p className="text-2xl font-bold">{userData.username}</p>
               <p className="text-zinc-400 my-1">{userData.email}</p>
@@ -77,6 +77,12 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                   </>
                 )}
               </div>
+            </div>
+          ) : (
+            <div role="status" className="max-w-sm animate-pulse">
+              <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
+              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
             </div>
           )}
         </div>
